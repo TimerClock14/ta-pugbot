@@ -1,0 +1,27 @@
+{
+  "name": "ta-pugbot",
+  "version": "1.0.0",
+  "description": "discord bot for organizing PUGs in the Tribes: Ascend community discord",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/Bot.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TimerClock14/ta-pugbot.git"
+  },
+  "author": "Jeffrey Cohen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TimerClock14/ta-pugbot/issues"
+  },
+  "homepage": "https://github.com/TimerClock14/ta-pugbot#readme",
+  "dependencies": {
+    "discord.js": "^14.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.6.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
