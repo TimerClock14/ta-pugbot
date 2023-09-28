@@ -4,7 +4,8 @@
   "description": "discord bot for organizing PUGs in the Tribes: Ascend community discord",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/Bot.ts"
+    "start": "cls && node build/index.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -17,10 +18,14 @@
   },
   "homepage": "https://github.com/TimerClock14/ta-pugbot#readme",
   "dependencies": {
-    "discord.js": "^14.13.0"
+    "@discordjs/rest": "^2.0.1",
+    "chalk": "^4.1.2",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "mongoose": "^7.5.3"
   },
   "devDependencies": {
-    "@types/node": "^20.6.2",
+    "@types/node": "^20.7.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }

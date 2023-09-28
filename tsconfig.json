@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "commonjs",
-    "rootDir": "./src/",
-    "outDir": "./dist/",
+    "rootDir": "./src",
+    "outDir": "./build",
     "strict": true,
     "moduleResolution": "node",
     "importHelpers": true,
@@ -18,7 +18,5 @@
     "sourceMap": false,
     "baseUrl": "./"
   },
-  "files": ["src/Bot.ts"],
-  "include": ["./**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["./src/**/*"]
 }
