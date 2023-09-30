@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { getThemeColor } from "../functions";
-import { SlashCommand } from "../types";
+import type { SlashCommand } from "../types";
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -10,7 +10,6 @@ const command: SlashCommand = {
     interaction.reply({
       embeds: [
         new EmbedBuilder()
-          .setAuthor({ name: "PugBot" })
           .setDescription(
             `${interaction.user.displayName} has been removed from {{queue}}.`
           )

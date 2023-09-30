@@ -4,20 +4,22 @@ import type { SlashCommand } from "../types";
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
-    .setName("add")
-    .setDescription("Add yourself to all queues or specified queue."),
+    .setName("queues")
+    .setDescription("List all the queues."),
   execute: (interaction) => {
+    const allQueues = interaction.client.queueManager.allQueueNames;
+
     interaction.reply({
       embeds: [
         new EmbedBuilder()
-          .setDescription(
-            `${interaction.user.displayName} has been added to {{queue}}.`
-          )
+          .setTitle("Queues")
+          .setDescription(allQueues.join("\n"))
           .setColor(getThemeColor("success")),
       ],
+      ephemeral: true,
     });
   },
-  cooldown: 10,
+  cooldown: 1,
 };
 
 export default command;

@@ -7,7 +7,7 @@ import {
   TextChannel,
 } from "discord.js";
 import GuildDB from "./schemas/Guild";
-import { GuildOption } from "./types";
+import type { GuildOption } from "./types";
 import mongoose from "mongoose";
 
 const themeColors = {
@@ -81,3 +81,6 @@ export const setGuildOption = async (
   foundGuild.options[option] = value;
   foundGuild.save();
 };
+
+export const keys = <T extends {}>(object: T) =>
+  Object.keys(object) as Array<keyof T>;

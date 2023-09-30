@@ -2,23 +2,24 @@ import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
   AutocompleteInteraction,
-  PermissionResolvable,
   Collection,
-  Message,
 } from "discord.js";
+import { QueueManager } from "./queue/QueueManager";
+import type { Document } from "mongoose";
 
 export interface SlashCommand {
   command: SlashCommandBuilder;
   execute: (interaction: ChatInputCommandInteraction) => void;
   autocomplete?: (interaction: AutocompleteInteraction) => void;
-  cooldown?: number; // in seconds
+  /** in seconds */
+  cooldown?: number;
 }
 
 interface GuildOptions {
   prefix: string;
 }
 
-export interface IGuild extends mongoose.Document {
+export interface IGuild extends Document {
   guildID: string;
   options: GuildOptions;
   joinedAt: Date;
@@ -48,6 +49,7 @@ declare global {
 declare module "discord.js" {
   export interface Client {
     commands: Collection<string, SlashCommand>;
+    queueManager: QueueManager;
     cooldowns: Collection<string, number>;
   }
 }

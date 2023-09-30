@@ -3,7 +3,7 @@ import { REST } from "@discordjs/rest";
 import { readdirSync } from "fs";
 import { join } from "path";
 import { color } from "../functions";
-import { SlashCommand } from "../types";
+import type { SlashCommand } from "../types";
 
 module.exports = (client: Client) => {
   const commands: SlashCommandBuilder[] = [];

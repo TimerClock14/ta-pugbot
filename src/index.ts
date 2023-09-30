@@ -4,14 +4,16 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds],
 });
 
-import { SlashCommand } from "./types";
+import type { SlashCommand } from "./types";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { join } from "path";
+import { QueueManager } from "./queue/QueueManager";
 config();
 
 client.commands = new Collection<string, SlashCommand>();
 client.cooldowns = new Collection<string, number>();
+client.queueManager = new QueueManager();
 
 const handlersDir = join(__dirname, "./handlers");
 readdirSync(handlersDir).forEach((handler) => {
