@@ -42,6 +42,7 @@ declare global {
       CLIENT_SECRET: string;
       MONGO_URI: string;
       MONGO_DATABASE_NAME: string;
+      JSON_DIR: string;
     }
   }
 }

@@ -1,14 +1,73 @@
 import { User } from "discord.js";
 import { Queue, QueueSettings } from "./Queue";
+import { loadQueues, saveQueues } from "../json";
+import { keys } from "../functions";
+
+export type QueueSnapshot = {
+  queues: Array<
+    {
+      name: string;
+    } & QueueSettings
+  >;
+  registerMap: {
+    [memberId: string]: string[];
+  };
+};
+
+type QueuesMap = {
+  [name: string]: Queue;
+};
+
+type MemberQueueMap = {
+  [memberId: string]: Set<string>;
+};
 
 export class QueueManager {
-  private _queues: {
-    [name: string]: Queue;
-  } = {};
+  private _queues: QueuesMap = {};
 
-  private _memberRegisteredQueueMap: {
-    [memberId: string]: Set<string>;
-  } = {};
+  private _memberRegisteredQueueMap: MemberQueueMap = {};
+
+  constructor() {
+    const snapshot = loadQueues();
+
+    this._queues = snapshot.queues.reduce((all, { name, ...settings }) => {
+      return {
+        ...all,
+        [name]: new Queue(name, settings, this),
+      };
+    }, {} as QueuesMap);
+
+    this._memberRegisteredQueueMap = keys(snapshot.registerMap).reduce(
+      (all, memberId) => ({
+        ...all,
+        [memberId]: new Set(snapshot.registerMap[memberId]),
+      }),
+      {} as MemberQueueMap
+    );
+  }
+
+  // Saves the queue state to persistent storage
+  private save() {
+    const qSnapshots = Object.values(this._queues).map((q) => q.getSnapshot());
+    const registerMapSnapshots = keys(this._memberRegisteredQueueMap).reduce(
+      (all, curr) => {
+        const valuesAsArray: string[] = [];
+        this._memberRegisteredQueueMap[curr].forEach((value) =>
+          valuesAsArray.push(value)
+        );
+        return {
+          ...all,
+          [curr]: valuesAsArray,
+        };
+      },
+      {} as QueueSnapshot["registerMap"]
+    );
+
+    saveQueues({
+      queues: qSnapshots,
+      registerMap: registerMapSnapshots,
+    });
+  }
 
   private queueNameExists(name: string) {
     return Boolean(this._queues[name]);
@@ -34,6 +93,7 @@ export class QueueManager {
   createQueue(name: string, settings: QueueSettings) {
     if (!this.queueNameExists(name)) {
       this._queues[name] = new Queue(name, settings, this);
+      this.save();
       return true;
     }
 
@@ -54,6 +114,8 @@ export class QueueManager {
     for (let memberId in Object.keys(this._memberRegisteredQueueMap)) {
       this._memberRegisteredQueueMap[memberId].delete(name);
     }
+
+    this.save();
 
     return true;
   }
@@ -86,6 +148,8 @@ export class QueueManager {
 
     queue.__dangerouslySetNameNoPropagate(newName);
 
+    this.save();
+
     return true;
   }
 
@@ -113,7 +177,13 @@ export class QueueManager {
       this._memberRegisteredQueueMap[memberId] = new Set<string>();
     }
 
-    return this._memberRegisteredQueueMap[memberId].add(queueName);
+    const result = this._memberRegisteredQueueMap[memberId].add(queueName);
+
+    if (result) {
+      this.save();
+    }
+
+    return result;
   }
 
   /**
@@ -140,7 +210,13 @@ export class QueueManager {
       return false;
     }
 
-    return this._memberRegisteredQueueMap[memberId].delete(queueName);
+    const result = this._memberRegisteredQueueMap[memberId].delete(queueName);
+
+    if (result) {
+      this.save();
+    }
+
+    return result;
   }
 
   addMemberToAllRegisteredQueues(member: User) {

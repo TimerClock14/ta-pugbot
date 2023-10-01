@@ -47,6 +47,14 @@ export class Queue {
     this._queueManager = queueManager;
   }
 
+  getSnapshot() {
+    return {
+      name: this._name,
+      size: this._settings.size,
+      pickOrder: this._settings.pickOrder,
+    };
+  }
+
   get settings() {
     return { ...this._settings };
   }

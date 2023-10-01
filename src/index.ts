@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits, Collection } from "discord.js";
+import { initJsonFiles } from "./json";
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],
@@ -10,6 +11,8 @@ import { readdirSync } from "fs";
 import { join } from "path";
 import { QueueManager } from "./queue/QueueManager";
 config();
+
+initJsonFiles();
 
 client.commands = new Collection<string, SlashCommand>();
 client.cooldowns = new Collection<string, number>();
