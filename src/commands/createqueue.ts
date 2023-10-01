@@ -9,8 +9,8 @@ import { generateDefaultPickOrder } from "../queue/Queue";
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
-    .setName("addqueue")
-    .setDescription("Add a new queue.")
+    .setName("createqueue")
+    .setDescription("Create a new queue.")
     .addStringOption((option) =>
       option
         .setName("name")
